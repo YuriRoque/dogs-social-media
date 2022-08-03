@@ -1,0 +1,37 @@
+import { PHOTO_DELETE } from '../../../api';
+import useFetch from '../../../hooks/useFetch';
+import styles from './style.module.css';
+
+const PhotoDelete = ({ id }) => {
+  const { loading, request } = useFetch();
+
+  const handleClick = async () => {
+    const confirm = window.confirm(
+      'Tem certeza que deseja deletar esta imagem?',
+    );
+
+    if (confirm) {
+      const { url, options } = PHOTO_DELETE(id);
+
+      const { response } = await request(url, options);
+
+      if (response.ok) window.location.reload();
+    }
+  };
+
+  return (
+    <>
+      {loading ? (
+        <button className={styles.delete} disabled>
+          Deletar
+        </button>
+      ) : (
+        <button className={styles.delete} onClick={handleClick}>
+          Deletar
+        </button>
+      )}
+    </>
+  );
+};
+
+export default PhotoDelete;
